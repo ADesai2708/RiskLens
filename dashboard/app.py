@@ -165,6 +165,18 @@ if st.button(
     use_container_width=True,
 ):
 
+    if tenure < 0:
+        st.error("Tenure must not be negative.")
+        st.stop()
+
+    if monthly_charges < 0:
+        st.error("Monthly charges must not be negative.")
+        st.stop()
+
+    if total_charges < 0:
+        st.error("Total charges must not be negative.")
+        st.stop()
+
     payload = {
         "gender": gender,
         "SeniorCitizen": senior_citizen,
@@ -239,36 +251,45 @@ if st.button(
 
             st.subheader("Why did the model make this prediction?")
 
-            explanation_data = []
+            st.write(
+                "These are the strongest factors influencing this "
+                "individual prediction."
+            )
 
             for explanation in explanations:
 
-                explanation_data.append(
-                    {
-                        "Feature": explanation["feature"],
-                        "SHAP Value": round(
-                            explanation["shap_value"],
-                            4,
-                        ),
-                        "Impact": round(
-                            explanation["impact"],
-                            4,
-                        ),
-                        "Direction": explanation["direction"],
-                    }
-                )
+                feature = explanation["feature"]
+                shap_value = explanation["shap_value"]
+                impact = explanation["impact"]
+                direction = explanation["direction"]
 
-            st.dataframe(
-                explanation_data,
-                use_container_width=True,
-                hide_index=True,
-            )
+                if direction == "increases":
+                    indicator = "↑"
+                else:
+                    indicator = "↓"
+
+                col1, col2, col3 = st.columns([5, 2, 2])
+
+                with col1:
+                    st.write(f"**{indicator} {feature}**")
+
+                with col2:
+                    st.write(f"SHAP: `{shap_value:.4f}`")
+
+                with col3:
+                    st.write(f"Impact: `{impact:.4f}`")
 
         else:
 
-            st.error(
-                f"API error: {response.status_code}"
-            )
+            try:
+                error_detail = response.json().get(
+                    "detail",
+                    "Unknown API error",
+                )
+            except ValueError:
+                error_detail = response.text
+
+            st.error(f"Prediction failed: {error_detail}")
 
     except requests.exceptions.RequestException as error:
 
