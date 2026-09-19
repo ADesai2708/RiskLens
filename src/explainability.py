@@ -92,3 +92,55 @@ def explain_single_prediction(
     )
 
     return explanation
+def format_feature_name(feature_name):
+    """
+    Convert transformed feature names into
+    human-readable names for the dashboard.
+    """
+
+    feature_name = feature_name.replace(
+        "numerical__",
+        ""
+    )
+
+    feature_name = feature_name.replace(
+        "categorical__",
+        ""
+    )
+
+    replacements = {
+        "IsMonthToMonth": "Month-to-month contract",
+        "UsesElectronicCheck": "Electronic check",
+        "AvgMonthlySpend": "Average monthly spend",
+        "ServiceCount": "Number of services",
+        "SeniorCitizen": "Senior citizen",
+        "MonthlyCharges": "Monthly charges",
+        "TotalCharges": "Total charges",
+        "tenure": "Customer tenure",
+        "InternetService_Fiber optic": "Fiber optic internet",
+        "InternetService_DSL": "DSL internet",
+        "InternetService_No": "No internet service",
+        "OnlineSecurity_No": "No online security",
+        "OnlineSecurity_Yes": "Online security",
+        "TechSupport_No": "No tech support",
+        "TechSupport_Yes": "Tech support",
+        "OnlineBackup_No": "No online backup",
+        "OnlineBackup_Yes": "Online backup",
+        "DeviceProtection_No": "No device protection",
+        "DeviceProtection_Yes": "Device protection",
+        "StreamingTV_Yes": "Streaming TV",
+        "StreamingMovies_Yes": "Streaming movies",
+        "Contract_Month-to-month": "Month-to-month contract",
+        "Contract_One year": "One-year contract",
+        "Contract_Two year": "Two-year contract",
+        "PaperlessBilling_Yes": "Paperless billing",
+        "PaperlessBilling_No": "No paperless billing",
+        "MultipleLines_Yes": "Multiple phone lines",
+        "MultipleLines_No": "No multiple phone lines",
+        "gender_Male": "Male customer",
+        "gender_Female": "Female customer",
+        "Dependents_Yes": "Has dependents",
+        "Dependents_No": "No dependents",
+    }
+
+    return replacements.get(feature_name, feature_name)
