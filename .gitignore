@@ -37,3 +37,8 @@ Thumbs.db
 
 # Streamlit
 .streamlit/secrets.toml
+
+models/*
+!models/
+models/*
+!models/xgboost_churn_pipeline.joblib
